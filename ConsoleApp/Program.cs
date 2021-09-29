@@ -10,7 +10,16 @@ namespace ConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static IConfigurationRoot ConfigRoot { get; }
+        static ConfigApp Config { get; }
+
+        static Program()
+        {
+            Config = GetConfig(out var root);
+            ConfigRoot = root;
+        }
+
+        static ConfigApp GetConfig(out IConfigurationRoot root)
         {
             //package Microsoft.Extensions.Configuration
             var config = new ConfigurationBuilder()
@@ -29,10 +38,16 @@ namespace ConsoleApp
             //package Microsoft.Extensions.Configuration.Binder
             config.Bind(configApp);
 
+            root = config;
+            return configApp;
+        }
+
+        static void Main(string[] args)
+        {
             var person = new PersonFaker().Generate(1).Single();
 
-            //Console.WriteLine($"{config.GetSection("json").GetSection("SubSection")["SubSectionKey2"]} {person.LastName} {person.FirstName} {config.GetSection("json")["SectionKey1"]}!");
-            Console.WriteLine($"{configApp.Json.SubSection.SubSectionKey2} {person.LastName} {person.FirstName} {configApp.Json.SectionKey1}!");
+            //Console.WriteLine($"{ConfigRoot.GetSection("json").GetSection("SubSection")["SubSectionKey2"]} {person.LastName} {person.FirstName} {ConfigRoot.GetSection("json")["SectionKey1"]}!");
+            Console.WriteLine($"{Config.Json.SubSection.SubSectionKey2} {person.LastName} {person.FirstName} {Config.Json.SectionKey1}!");
         }
     }
 }
