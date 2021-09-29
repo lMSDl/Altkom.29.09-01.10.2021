@@ -7,16 +7,22 @@ using System.Threading.Tasks;
 using Bogus;
 using Models;
 using Services.Bogus.Fakers;
+using Microsoft.Extensions.Logging;
 
 namespace Services.Bogus
 {
     public class Service<T> : IService<T> where T : Entity
     {
         private ICollection<T> _entities;
+        private ILogger<Service<T>> _logger;
 
-        public Service(EntityFaker<T> faker, int count)
+        public Service(EntityFaker<T> faker, ILogger<Service<T>> logger) : this(faker, logger, 5)
+        {
+        }
+        public Service(EntityFaker<T> faker, ILogger<Service<T>> logger, int count)
         {
             _entities = faker.Generate(count);
+            _logger = logger;
         }
 
         public int Create(T entity)
@@ -33,6 +39,7 @@ namespace Services.Bogus
 
         public IEnumerable<T> Read()
         {
+            _logger.LogInformation("Reading all data..");
             return _entities.ToList();
         }
 

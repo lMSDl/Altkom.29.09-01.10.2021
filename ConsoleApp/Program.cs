@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Bogus;
 using ConsoleApp.Configurations;
+using Microsoft.Extensions.Logging;
 using ConsoleApp.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -117,10 +118,14 @@ namespace ConsoleApp
                            .AddTransient<FiggleConsoleService>()
                            .AddScoped<IConsoleService, FiggleConsoleService>()
                            .AddScoped<IConsoleService, ConsoleService>()
-                           
+
                            .AddSingleton<EntityFaker<Models.Person>, PersonFaker>()
-                           .AddSingleton<IService<Models.Person>>(x => new Service<Models.Person>(x.GetService<EntityFaker<Models.Person>>(), x.GetService<ConfigApp>().Json.Values.Max()))
-                           
+                           //.AddSingleton<IService<Models.Person>>(x => new Service<Models.Person>(x.GetService<EntityFaker<Models.Person>>(), x.GetService<ConfigApp>().Json.Values.Max()))
+                           .AddSingleton<IService<Models.Person>, Service<Models.Person>>()
+
+                           //package Microsoft.Extensions.Logging
+                           .AddLogging(builder => builder.AddConsole().AddDebug().AddEventLog())
+
                            .BuildServiceProvider();
         }
     }
