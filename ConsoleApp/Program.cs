@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using Microsoft.Extensions.Configuration;
 using Models;
 using Services.Bogus.Fakers;
 
@@ -10,9 +11,23 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            //package Microsoft.Extensions.Configuration
+            var config = new ConfigurationBuilder()
+
+            //package Microsoft.Extensions.Configuration.FileExtensions
+            //package Microsoft.Extensions.Configuration.Json
+            .AddJsonFile("Configurations/config.json", true)
+            //package Microsoft.Extensions.Configuration.Xml
+            .AddXmlFile("Configurations/config.xml", true)
+            //package Microsoft.Extensions.Configuration.Ini
+            .AddIniFile("Configurations/config.ini", true)
+            //package NetEscapades.Configuration.Yaml
+            .AddYamlFile("Configurations/config.yaml", true)
+            .Build();
+
             var person = new PersonFaker().Generate(1).Single();
 
-            Console.WriteLine($"Hello {person.LastName} {person.FirstName}!");
+            Console.WriteLine($"Hello {person.LastName} {person.FirstName} {config["Hello"]}!");
         }
     }
 }
