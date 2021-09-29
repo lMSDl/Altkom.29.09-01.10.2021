@@ -27,7 +27,7 @@ namespace ConsoleApp
 
             var person = new PersonFaker().Generate(1).Single();
 
-            Console.WriteLine($"Hello {person.LastName} {person.FirstName} {config["Hello"]}!");
+            Console.WriteLine($"{config.GetSection("json").GetSection("SubSection")["SubSectionKey2"]} {person.LastName} {person.FirstName} {config.GetSection("json")["SectionKey1"]}!");
         }
     }
 }

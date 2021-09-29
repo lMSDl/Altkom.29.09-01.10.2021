@@ -1,3 +1,9 @@
 <configration>
-	<Hello>from XML</Hello>
+	<xml>
+		<SubSection>
+			<SubSectionKey1>Hello</SubSectionKey1>
+			<SubSectionKey2>Bye</SubSectionKey2>
+		</SubSection>
+		<SectionKey1>from XML</SectionKey1>
+	</xml>>
 </configration>
