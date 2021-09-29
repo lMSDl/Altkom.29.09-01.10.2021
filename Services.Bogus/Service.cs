@@ -39,8 +39,18 @@ namespace Services.Bogus
 
         public IEnumerable<T> Read()
         {
-            _logger.LogInformation("Reading all data..");
-            return _entities.ToList();
+            _logger.LogInformation("Creating variable");
+            IEnumerable<T> entities;
+            using (_logger.BeginScope(nameof(Read)))
+            {
+                _logger.LogInformation("Entering scope");
+                _logger.LogInformation("Reading all data..");
+                entities = _entities.ToList();
+                _logger.LogInformation("Exiting scope");
+            }
+
+            _logger.LogInformation("return result");
+            return entities;
         }
 
         public T Read(int id)

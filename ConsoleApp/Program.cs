@@ -124,7 +124,9 @@ namespace ConsoleApp
                            .AddSingleton<IService<Models.Person>, Service<Models.Person>>()
 
                            //package Microsoft.Extensions.Logging
-                           .AddLogging(builder => builder.AddConsole().AddDebug().AddEventLog())
+                           .AddLogging(builder => builder
+                                .AddConfiguration(ConfigRoot.GetSection("Logging"))
+                                .AddConsole().AddDebug().AddEventLog())
 
                            .BuildServiceProvider();
         }

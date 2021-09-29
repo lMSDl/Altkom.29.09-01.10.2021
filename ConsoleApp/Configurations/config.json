@@ -6,7 +6,19 @@
     },
     "SectionKey1": "from Json",
     "Values": [
-      1, 3, 5
+      1,
+      3,
+      5
     ]
+  },
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information"
+    },
+    "Console": {
+      "IncludeScopes": true
+    }
+
   }
 }
