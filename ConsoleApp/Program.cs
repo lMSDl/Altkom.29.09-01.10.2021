@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Models;
+using Services.Bogus.Fakers;
 
 namespace ConsoleApp
 {
@@ -8,13 +10,9 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            var person = new Person { FirstName = "Ewa", LastName = "Ewowska" };
+            var person = new PersonFaker().Generate(1).Single();
 
-            while (true)
-            {
-                Thread.Sleep(1000);
-                Console.WriteLine($"Hello {person.LastName} {person.FirstName}!");
-            }
+            Console.WriteLine($"Hello {person.LastName} {person.FirstName}!");
         }
     }
 }
