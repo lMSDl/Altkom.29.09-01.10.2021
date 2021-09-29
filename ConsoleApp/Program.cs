@@ -14,11 +14,13 @@ namespace ConsoleApp
     {
         static IConfigurationRoot ConfigRoot { get; }
         static ConfigApp Config { get; }
+        static ServiceProvider ServiceProvider {get;}
 
         static Program()
         {
             Config = GetConfig(out var root);
             ConfigRoot = root;
+            ServiceProvider = GetServiceProvider();
         }
 
         static ConfigApp GetConfig(out IConfigurationRoot root)
@@ -52,50 +54,57 @@ namespace ConsoleApp
             //Console.WriteLine($"{Config.Json.SubSection.SubSectionKey2} {person.LastName} {person.FirstName} {Config.Json.SectionKey1}!");
             var text = $"{Config.Json.SubSection.SubSectionKey2} {person.LastName} {person.FirstName} {Config.Json.SectionKey1}!";
 
-            //new FiggleConsoleService(new ConsoleService()).WriteLine(text);
+            TestDependencyInjection(text);
+        }
 
+        private static void TestDependencyInjection(string text)
+        {
+            //new FiggleConsoleService(new ConsoleService()).WriteLine(text);
+            var service = ServiceProvider.GetService<FiggleConsoleService>();
+            service.WriteLine(text);
+            service = ServiceProvider.GetService<FiggleConsoleService>();
+            service.WriteLine(text);
+            var service2 = ServiceProvider.GetService<IConsoleService>();
+            service2.WriteLine(text);
+            service2 = ServiceProvider.GetService<IConsoleService>();
+            service2.WriteLine(text);
+
+            using (var scoped = ServiceProvider.CreateScope())
+            {
+                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
+                service.WriteLine(text);
+                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
+                service.WriteLine(text);
+                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
+                service.WriteLine(text);
+                service2 = scoped.ServiceProvider.GetService<IConsoleService>();
+                service2.WriteLine(text);
+                service2 = scoped.ServiceProvider.GetService<IConsoleService>();
+                service2.WriteLine(text);
+            }
+            using (var scoped = ServiceProvider.CreateScope())
+            {
+                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
+                service.WriteLine(text);
+                service2 = scoped.ServiceProvider.GetService<IConsoleService>();
+                service2.WriteLine(text);
+            }
+
+            foreach (var item in ServiceProvider.GetServices<IConsoleService>())
+            {
+                item.WriteLine(item.GetType().FullName);
+            }
+        }
+
+        private static ServiceProvider GetServiceProvider()
+        {
             //package Microsoft.Extensions.DependencyInjection
             var serviceCollection = new ServiceCollection();
-            var provider = serviceCollection.AddSingleton<ConsoleService>()
+            return serviceCollection.AddSingleton<ConsoleService>()
                            .AddTransient<FiggleConsoleService>()
                            .AddScoped<IConsoleService, FiggleConsoleService>()
                            .AddScoped<IConsoleService, ConsoleService>()
                            .BuildServiceProvider();
-
-            var service = provider.GetService<FiggleConsoleService>();
-            service.WriteLine(text);
-            service = provider.GetService<FiggleConsoleService>();
-            service.WriteLine(text);
-            var service2 = provider.GetService<IConsoleService>();
-            service2.WriteLine(text);
-            service2 = provider.GetService<IConsoleService>();
-            service2.WriteLine(text);
-
-            using (var scoped = provider.CreateScope())
-            {
-                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
-                service.WriteLine(text);
-                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
-                service.WriteLine(text);
-                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
-                service.WriteLine(text);
-                service2 = scoped.ServiceProvider.GetService<IConsoleService>();
-                service2.WriteLine(text);
-                service2 = scoped.ServiceProvider.GetService<IConsoleService>();
-                service2.WriteLine(text);
-            }
-            using (var scoped = provider.CreateScope())
-            {
-                service = scoped.ServiceProvider.GetService<FiggleConsoleService>();
-                service.WriteLine(text);
-                service2 = scoped.ServiceProvider.GetService<IConsoleService>();
-                service2.WriteLine(text);
-            }
-
-            foreach(var item in provider.GetServices<IConsoleService>())
-            {
-                item.WriteLine(item.GetType().FullName);
-            }
         }
     }
 }
