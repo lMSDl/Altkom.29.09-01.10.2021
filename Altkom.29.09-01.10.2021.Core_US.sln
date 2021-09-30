@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{312FAA20-7989-4A56-AEB6-639D18691DE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Interfaces", "Services.Interfaces\Services.Interfaces.csproj", "{6CE6A965-B68E-4048-8CFD-3B31F7790DCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Interfaces", "Services.Interfaces\Services.Interfaces.csproj", "{6CE6A965-B68E-4048-8CFD-3B31F7790DCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Bogus", "Services.Bogus\Services.Bogus.csproj", "{B496F1DF-AF36-42AA-B2EE-D2AD0AA7EFF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Bogus", "Services.Bogus\Services.Bogus.csproj", "{B496F1DF-AF36-42AA-B2EE-D2AD0AA7EFF2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{DD75154B-C41E-4BAC-800E-159B5CD032E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B496F1DF-AF36-42AA-B2EE-D2AD0AA7EFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B496F1DF-AF36-42AA-B2EE-D2AD0AA7EFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B496F1DF-AF36-42AA-B2EE-D2AD0AA7EFF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD75154B-C41E-4BAC-800E-159B5CD032E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD75154B-C41E-4BAC-800E-159B5CD032E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD75154B-C41E-4BAC-800E-159B5CD032E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD75154B-C41E-4BAC-800E-159B5CD032E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
