@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Models.Validators;
 using Services.Bogus;
 using Services.Bogus.Fakers;
 using Services.Interfaces;
@@ -28,12 +31,17 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers()
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PersonValidator>());
 
-            services.AddControllers();
+            //services.AddTransient<IValidator<Models.Person>, PersonValidator>();
+
+
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
             //});
+
 
             services.AddSingleton<EntityFaker<Models.Person>, PersonFaker>()
                     .AddSingleton<IService<Models.Person>, Service<Models.Person>>()

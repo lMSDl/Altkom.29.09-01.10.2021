@@ -35,17 +35,27 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(T person)
+        public IActionResult Post(T entity)
         {
-            var personId = _service.Create(person);
-            person = _service.Read(personId);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction(nameof(Get), new { id = personId }, person);
+            var entityId = _service.Create(entity);
+            entity = _service.Read(entityId);
+
+            return CreatedAtAction(nameof(Get), new { id = entityId }, entity);
         }
 
         [HttpPut("{id:int}")]
         public IActionResult Put(int id, T person)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (_service.Read(id) == null)
                 return NotFound();
 
