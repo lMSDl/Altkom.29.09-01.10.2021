@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Services.Bogus;
+using Services.Bogus.Fakers;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +34,11 @@ namespace WebApi
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
             //});
+
+            services.AddSingleton<EntityFaker<Models.Person>, PersonFaker>()
+                    .AddSingleton<IService<Models.Person>, Service<Models.Person>>()
+                    .AddSingleton<EntityFaker<Models.User>, UserFaker>()
+                    .AddSingleton<IService<Models.User>, Service<Models.User>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
