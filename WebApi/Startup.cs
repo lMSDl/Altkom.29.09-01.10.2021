@@ -38,7 +38,9 @@ namespace WebApi
             services.AddSingleton<EntityFaker<Models.Person>, PersonFaker>()
                     .AddSingleton<IService<Models.Person>, Service<Models.Person>>()
                     .AddSingleton<EntityFaker<Models.User>, UserFaker>()
-                    .AddSingleton<IService<Models.User>, Service<Models.User>>();
+                    .AddSingleton<IService<Models.User>, Service<Models.User>>()
+                    .AddSingleton<EntityFaker<Models.Address>, AddressFaker>()
+                    .AddSingleton<IService<Models.Address>, Service<Models.Address>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

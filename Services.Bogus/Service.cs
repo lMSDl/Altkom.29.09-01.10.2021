@@ -16,7 +16,7 @@ namespace Services.Bogus
         private ICollection<T> _entities;
         private ILogger<Service<T>> _logger;
 
-        public Service(EntityFaker<T> faker, ILogger<Service<T>> logger) : this(faker, logger, 5)
+        public Service(EntityFaker<T> faker, ILogger<Service<T>> logger) : this(faker, logger, 10)
         {
         }
         public Service(EntityFaker<T> faker, ILogger<Service<T>> logger, int count)

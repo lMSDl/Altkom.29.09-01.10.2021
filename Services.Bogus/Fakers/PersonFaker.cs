@@ -14,6 +14,7 @@ namespace Services.Bogus.Fakers
             RuleFor(x => x.FirstName, x => x.Person.FirstName);
             RuleFor(x => x.LastName, x => x.Person.LastName);
             RuleFor(x => x.PhoneNumber, x => x.Phone.PhoneNumber());
+            RuleFor(x => x.AddressId, x => x.Random.Int(0, 5));
         }
     }
 }
