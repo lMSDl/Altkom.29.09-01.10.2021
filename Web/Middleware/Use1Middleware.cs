@@ -18,6 +18,9 @@ namespace Web.Middleware
         public async Task InvokeAsync(HttpContext context)
         {
             Console.WriteLine("Begin Use1");
+
+            Console.WriteLine(context.GetEndpoint()?.DisplayName ?? "Unknown");
+
             await _next(context);
             Console.WriteLine("End Use1");
         }

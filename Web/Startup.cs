@@ -32,6 +32,8 @@ namespace Web
             //    Console.WriteLine("End Use1");
             //});
 
+            app.UseRouting();
+
             app.MapWhen(context => context.Request.Query.TryGetValue("Map", out var result) ? result == "true" : false, MapToMap);
             app.Map("/hello", MapToHello);
 
@@ -47,16 +49,26 @@ namespace Web
             //    Console.WriteLine("End Use2");
             //});
 
+           
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("/datetime", async context => await context.Response.WriteAsync(DateTime.Now.ToString()));
+            });
+
             app.UseMiddleware<RunMiddleware>();
-           // app.Run(async context =>
-           //{
-           //    Console.WriteLine("Begin Run");
 
-           //    await context.Response.WriteAsync("Hello from Run");
+            // app.Run(async context =>
+            //{
+            //    Console.WriteLine("Begin Run");
 
-           //    Console.WriteLine("End Run");
+            //    await context.Response.WriteAsync("Hello from Run");
 
-           //});
+            //    Console.WriteLine("End Run");
+
+            //});
+
+
         }
 
         private static void MapToHello(IApplicationBuilder mapApp)

@@ -13,7 +13,9 @@ namespace Web.Middleware
         {
             Console.WriteLine("Begin Use2");
 
-            if(context.Request.Query.TryGetValue("question", out var question))
+            Console.WriteLine(context.GetEndpoint()?.DisplayName ?? "Unknown");
+
+            if (context.Request.Query.TryGetValue("question", out var question))
             {
                 await context.Response.WriteAsync(question);
             }
