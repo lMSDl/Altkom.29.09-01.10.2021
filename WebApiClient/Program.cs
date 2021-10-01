@@ -12,25 +12,29 @@ namespace WebApiClient
         {
             var service = new HttpClientService("http://localhost:5000/api/");
 
+            var user = await service.GetAsync<User, int>("Users", 1);
+            var token = await service.PostAsync<User>("users/login", user);
+            service.Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+
             var resource = "people";
 
             var people = await service.GetAsync<Person>(resource);
 
-            var person = await service.GetAsync<Person, int>(resource, 3);
+            var person = await service.GetAsync<Person, int>(resource, 13);
 
             person = new Person() { FirstName = "Ewa", LastName = "Ewowska", AddressId = 2, PhoneNumber = "123-987-023" };
 
-            int id = await service.PostAsync<Person, int>(resource, person);
+           person = await service.PostAsync<Person, Person>(resource, person);
 
             person.FirstName = "Monika";
-            person.Id = 0;
-            await service.PutAsync<Person, int>(resource, id, person);
+            await service.PutAsync<Person, int>(resource, person.Id, person);
 
-            person = await service.GetAsync<Person, int>(resource, id);
+            person = await service.GetAsync<Person, int>(resource, person.Id);
 
-            await service.DeleteAsync(resource, id);
+            await service.DeleteAsync(resource, person.Id);
 
-            person = await service.GetAsync<Person, int>(resource, id);
+            person = await service.GetAsync<Person, int>(resource, person.Id);
         }
     }
 }

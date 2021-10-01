@@ -10,7 +10,7 @@ namespace WebApiClient
     public class HttpClientService
     {
         //package Microsoft.AspNet.WebApi.Client
-        private HttpClient _client;
+        public HttpClient Client { get; }
 
         public HttpClientService(string baseAddress) : this(new HttpClient { BaseAddress = new Uri(baseAddress) })
         {
@@ -18,12 +18,12 @@ namespace WebApiClient
 
         public HttpClientService(HttpClient httpClient)
         {
-            _client = httpClient;
+            Client = httpClient;
         }
 
         public async Task<IEnumerable<T>> GetAsync<T>(string resource)
         {
-            var response = await _client.GetAsync(resource);
+            var response = await Client.GetAsync(resource);
 
             response.EnsureSuccessStatusCode();
             /*if(response.IsSuccessStatusCode)
@@ -38,7 +38,7 @@ namespace WebApiClient
 
         public async Task<T> GetAsync<T, Tid>(string resource, Tid id)
         {
-            var response = await _client.GetAsync($"{resource}/{id}");
+            var response = await Client.GetAsync($"{resource}/{id}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<T>();
         }
@@ -46,20 +46,26 @@ namespace WebApiClient
 
         public async Task<Tresult> PostAsync<T, Tresult>(string resource, T entity)
         {
-            var response = await _client.PostAsJsonAsync(resource, entity);
+            var response = await Client.PostAsJsonAsync(resource, entity);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<Tresult>();
+        }
+        public async Task<string> PostAsync<T>(string resource, T entity)
+        {
+            var response = await Client.PostAsJsonAsync(resource, entity);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
         }
 
         public async Task PutAsync<T, TId>(string resource, TId id, T entity)
         {
-            var response = await _client.PutAsJsonAsync($"{resource}/{id}", entity);
+            var response = await Client.PutAsJsonAsync($"{resource}/{id}", entity);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task DeleteAsync<Tid>(string resource, Tid id)
         {
-            var response = await _client.DeleteAsync($"{resource}/{id}");
+            var response = await Client.DeleteAsync($"{resource}/{id}");
             response.EnsureSuccessStatusCode();
         }
     }
