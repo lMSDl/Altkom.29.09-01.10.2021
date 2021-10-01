@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models.Validators;
 using Services.Bogus;
@@ -17,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -49,10 +52,27 @@ namespace WebApi
                     .AddSingleton<EntityFaker<Models.User>, UserFaker>()
                     .AddSingleton<IService<Models.User>, Service<Models.User>>()
                     .AddSingleton<EntityFaker<Models.Address>, AddressFaker>()
-                    .AddSingleton<IService<Models.Address>, Service<Models.Address>>();
+                    .AddSingleton<IService<Models.Address>, Service<Models.Address>>()
+                    .AddScoped<AuthService>();
 
             services.AddSingleton<SampleActionFilter>();
             services.AddSingleton<SampleAsyncActionFilter>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(AuthService.Key)
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +87,8 @@ namespace WebApi
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
