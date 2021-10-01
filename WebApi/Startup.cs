@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -94,6 +95,12 @@ namespace WebApi
                     .AddRequirements(new AgeHandler(50))
                 );
             });
+
+            services.AddHealthChecks()
+                .AddSqlServer(Configuration.GetConnectionString("TestDb"))
+                .AddCheck<RandomHealth>(nameof(RandomHealth));
+
+            services.AddHealthChecksUI().AddInMemoryStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,6 +120,12 @@ namespace WebApi
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions()
+                {
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+                    Predicate = _ => true
+                });
+                endpoints.MapHealthChecksUI(config => { config.UIPath = "/health-ui"; config.ApiPath = "/health-ui-api"; });
                 endpoints.MapControllers();
             });
         }
