@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Models;
 using Models.Validators;
 using Services.Bogus;
 using Services.Bogus.Fakers;
@@ -19,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Filters;
+using WebApi.Handlers;
 using WebApi.Services;
 
 namespace WebApi
@@ -73,6 +75,25 @@ namespace WebApi
                         IssuerSigningKey = new SymmetricSecurityKey(AuthService.Key)
                     };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser();
+                    foreach (var item in Enum.GetNames(typeof(Roles)))
+                    {
+                        policy.RequireRole(item);
+                    }
+                });
+
+                options.AddPolicy("Age", policy =>
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .AddRequirements(new AgeHandler(50))
+                );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,6 +10,7 @@ using WebApi.Services;
 
 namespace WebApi.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class UsersController : BaseCrudController<User>
     {
         private AuthService _authService;

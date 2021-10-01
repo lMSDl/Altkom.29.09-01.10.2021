@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Interfaces;
@@ -18,6 +19,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}/people")]
+        [Authorize("Age")]
         public IActionResult GetPeople(int id)
         {
             return Ok(_peopleService.Read().Where(x => x.AddressId == id));

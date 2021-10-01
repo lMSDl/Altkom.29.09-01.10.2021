@@ -32,6 +32,7 @@ namespace WebApi.Services
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, user.Login));
+            claims.Add(new Claim(ClaimTypes.DateOfBirth, user.BirthDate.ToString()));
             claims.AddRange(user.Roles.ToString().Split(",").Select(x => new Claim(ClaimTypes.Role, x.Trim())));
 
 
