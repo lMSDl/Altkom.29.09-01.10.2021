@@ -12,6 +12,11 @@ namespace WebApiClient
     {
         private HttpClientService _service;
 
+        public PeopleService(HttpClientService service)
+        {
+            _service = service;
+        }
+
         public int Create(Person entity)
         {
             throw new NotImplementedException();
