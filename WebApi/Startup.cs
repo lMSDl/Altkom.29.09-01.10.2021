@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Filters;
 
 namespace WebApi
 {
@@ -49,6 +50,9 @@ namespace WebApi
                     .AddSingleton<IService<Models.User>, Service<Models.User>>()
                     .AddSingleton<EntityFaker<Models.Address>, AddressFaker>()
                     .AddSingleton<IService<Models.Address>, Service<Models.Address>>();
+
+            services.AddSingleton<SampleActionFilter>();
+            services.AddSingleton<SampleAsyncActionFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

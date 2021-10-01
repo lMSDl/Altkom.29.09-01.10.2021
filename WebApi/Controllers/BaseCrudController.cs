@@ -6,9 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Filters;
 
 namespace WebApi.Controllers
 {
+    
     public abstract class BaseCrudController<T> : BaseController where T : Entity
     {
         private IService<T> _service;
@@ -20,8 +22,11 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Get()
+        [ServiceFilter(typeof(SampleAsyncActionFilter))]
+        public async Task<IActionResult> Get()
         {
+            await Task.Delay(3000);
+
             return Ok(_service.Read());
         }
 
