@@ -55,7 +55,7 @@ namespace WebApi.Controllers
             var entityId = _service.Create(entity);
             entity = _service.Read(entityId);
 
-            return CreatedAtAction(nameof(Get), new { id = entityId }, entity);
+            return CreatedAtAction(nameof(Get), new { id = entityId }, entityId);
         }
 
         [HttpPut("{id:int}")]

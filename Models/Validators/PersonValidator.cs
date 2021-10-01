@@ -22,7 +22,7 @@ namespace Models.Validators
 
         private bool CheckPhoneNumber(string phoneNumber)
         {
-            return phoneNumber.Contains("0");
+            return phoneNumber?.Contains("0") ?? false;
         }
     }
 }
